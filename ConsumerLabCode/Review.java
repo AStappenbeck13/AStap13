@@ -3,8 +3,8 @@ import java.util.Scanner;
 import java.io.File;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Random;
-import java.io.*;
+//import java.util.Random;
+//import java.io.*;
 
 /**
  * Class that contains helper methods for the Review Lab
@@ -17,16 +17,23 @@ public class Review {
  
   public static void main(String[] args)
   {
-    sentimentVal("happily");
-    sentimentVal("terrible");
-    sentimentVal("cold");
+    System.out.println(sentimentVal("happily"));
+    System.out.println(sentimentVal("terrible"));
+    System.out.println(sentimentVal("cold"));
+
+    System.out.println();
+
+    System.out.println(totalSentiment("/workspace/AStap13/ConsumerLabCode/SampleReview.txt"));
+    System.out.println(starRating("/workspace/AStap13/ConsumerLabCode/SampleReview.txt"));
+
+    System.out.println(fakeReview("/workspace/AStap13/ConsumerLabCode/SampleReview.txt"));
   }
   
   private static final String SPACE = " ";
   
   static{
     try {
-      Scanner input = new Scanner(new File("cleanSentiment.csv"));
+      Scanner input = new Scanner(new File("/workspace/AStap13/ConsumerLabCode/cleanSentiment.csv"));
       while(input.hasNextLine()){
         String[] temp = input.nextLine().split(",");
         sentiment.put(temp[0],Double.parseDouble(temp[1]));
@@ -41,7 +48,7 @@ public class Review {
   
   //read in the positive adjectives in postiveAdjectives.txt
      try {
-      Scanner input = new Scanner(new File("positiveAdjectives.txt"));
+      Scanner input = new Scanner(new File("/workspace/AStap13/ConsumerLabCode/positiveAdjectives.txt"));
       while(input.hasNextLine()){
         String temp = input.nextLine().trim();
         System.out.println(temp);
@@ -55,7 +62,7 @@ public class Review {
  
   //read in the negative adjectives in negativeAdjectives.txt
      try {
-      Scanner input = new Scanner(new File("negativeAdjectives.txt"));
+      Scanner input = new Scanner(new File("/workspace/AStap13/ConsumerLabCode/negativeAdjectives.txt"));
       while(input.hasNextLine()){
         negAdjectives.add(input.nextLine().trim());
       }
@@ -103,6 +110,170 @@ public class Review {
     {
       return 0;
     }
+  }
+
+  public static double totalSentiment(String fileName)
+  {
+    
+    // rohan's way
+    /*
+    String sentence = textToString(fileName);
+    String[] words = sentence.split(" ");
+    double total = 0;
+    for (String s : words){
+      total += sentimentVal(s);
+    }
+
+    return total;
+    */
+
+
+
+    double total = 0;
+    String s = textToString(fileName);
+
+    String alphabet = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz ";
+
+    for (int i = 0; i < s.length(); i++)
+    {
+      String x = s.substring(i, i + 1);
+      boolean isLetter = false;
+
+      for (int j = 0; j < alphabet.length(); j++)
+      {
+        if (x.equals(alphabet.substring(j, j + 1)))
+        {
+          isLetter = true;
+        }
+      }
+
+      if (!isLetter)
+      {
+        s = s.replace(x, "");
+      }
+    }
+    s = s + " ";
+    String word = "";
+
+    while (s.length() > 0)
+    {
+      int space = s.indexOf(" ");
+      word = s.substring(0, space);
+      total += sentimentVal(word);
+      s = s.substring(space + 1);
+
+    }
+
+    return total;
+  }
+
+  public static int starRating(String fileName)
+  {
+    double x = totalSentiment(fileName);
+
+    if (x <= 0)
+    {
+      return 1;
+    }
+    else if (x <= 10)
+    {
+      return 2;
+    }
+    else if (x <= 20)
+    {
+      return 3;
+    }
+    else if (x <= 30)
+    {
+      return 4;
+    }
+    else
+    {
+      return 5;
+    }
+  }
+
+  public static String fakeReview(String fileName)
+  {
+    String reviewWords = Review.textToString(fileName);
+    String oneWord = "";
+    String fakeReview = "";
+
+    int spacePosition = reviewWords.indexOf(" ");
+    while (spacePosition != -1)
+    {
+      oneWord = reviewWords.substring(0, spacePosition);
+
+      reviewWords = reviewWords.substring(spacePosition + 1);
+
+      if(oneWord.substring(0,1).equals("*"))
+      {
+        String punctuation = getPunctuation(reviewWords);
+        String randomWord = randomPositiveAdj();
+        fakeReview = fakeReview + randomWord + punctuation;
+      }
+      else
+      {
+        fakeReview += reviewWords;
+      }
+      fakeReview += SPACE;
+      
+      spacePosition = reviewWords.indexOf(" ");
+    }
+
+    if(oneWord.substring(0,1).equals("*"))
+    {
+      String punctuation = getPunctuation(reviewWords);
+      String randomWord = randomPositiveAdj();
+      fakeReview = fakeReview + randomWord + punctuation;
+    }
+    else
+    {
+      fakeReview += reviewWords;
+    }
+    return fakeReview;
+
+
+    /*String alphabet = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz* ";
+
+    for (int i = 0; i < s.length(); i++)
+    {
+      String x = s.substring(i, i + 1);
+      boolean isLetter = false;
+
+      for (int j = 0; j < alphabet.length(); j++)
+      {
+        if (x.equals(alphabet.substring(j, j + 1)))
+        {
+          isLetter = true;
+        }
+      }
+
+      if (!isLetter)
+      {
+        s = s.replace(x, "");
+      }
+    }
+
+    String finalString = s;
+    s = s + " ";
+    String word = "";
+
+    while (s.length() > 0)
+    {
+      int space = s.indexOf(" ");
+      word = s.substring(0, space);
+      s = s.substring(space + 1);
+
+      if (word.substring(0,1).equals("*"))
+      {
+        sentimentVal(word);
+
+        // how do I get another word from the choices???
+      }
+    }    
+
+    return finalString;*/
   }
   
   /**
