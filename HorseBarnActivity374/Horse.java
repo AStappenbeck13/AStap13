@@ -29,7 +29,9 @@ public class Horse
     //Returns the name of the horse.
     public String toString()
     {
-      return name;
+      String h = name + ", " + weight + "lbs";
+
+      return h;
     }
 }
   
