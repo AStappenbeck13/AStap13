@@ -12,8 +12,9 @@ public class RandomPermutation
         {
             int pos = (int) (Math.random() * oldHorses.size());
 
-            newHorses.add(oldHorses.get(pos));
-            oldHorses.remove(pos);
+            //newHorses.add(oldHorses.get(pos));
+            //oldHorses.remove(pos);
+            newHorses.add(oldHorses.remove(pos));
         }
         
         return newHorses;
