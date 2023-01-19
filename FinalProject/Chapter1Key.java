@@ -1,3 +1,5 @@
+package FinalProject;
+
 public class Chapter1Key {
 
     public static void main(String[] args)

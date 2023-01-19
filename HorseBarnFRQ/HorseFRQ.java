@@ -1,3 +1,5 @@
+package HorseBarnFRQ;
+
 public class HorseFRQ {
 
     private String name;
