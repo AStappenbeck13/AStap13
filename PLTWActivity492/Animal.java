@@ -40,4 +40,9 @@ public class Animal
   {
     System.out.println("Speak");
   }
+
+  public void sleep()
+  {
+    System.out.println("The animal sleeps");
+  }
 }

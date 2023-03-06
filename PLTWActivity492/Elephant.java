@@ -27,4 +27,9 @@ public class Elephant extends Animal
     {
       System.out.println("Trumpet");
     }
+
+    public String toString()
+    {
+        return "This is an object of the Elephant class.";
+    }
 }
