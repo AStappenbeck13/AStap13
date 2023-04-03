@@ -1,10 +1,3 @@
-/*
- * Note: still a work in progress
- * need to figure out recursion
- * only werks with 1 set of parenthesis
- * I will work on this over the weekend!!
- */
-
 import java.util.Scanner;
 import java.util.ArrayList;
 
